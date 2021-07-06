@@ -15,6 +15,11 @@ const AppRouter: React.FC<IAppRouter> = ({ children }) => {
   return (
     <BrowserRouter>
       {children}
+      {/* <Switch>
+        {routers.map(router => (
+          router.component && <Route exact path={router.path} component={router.component}></Route>
+        ))}
+      </Switch> */}
     </BrowserRouter>
   )
 }
