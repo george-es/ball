@@ -1,12 +1,18 @@
+// 入口文件
 import React from 'react'
 import ReactDOM from 'react-dom'
+import App from './page/app'
+import Routers from './routes'
 import './index.css'
 import 'antd/dist/antd.css'
-import App from './page/app'
+
+const MOUNT_NODE = document.getElementById('root')
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Routers>
+      <App />
+    </Routers>
   </React.StrictMode>,
-  document.getElementById('root')
+  MOUNT_NODE
 )

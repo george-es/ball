@@ -1,29 +1,59 @@
+// 主应用入口
 import React, { useState } from 'react'
+import { withRouter } from 'react-router';
 import { Layout, Menu, Button } from 'antd';
 import styled from 'styled-components';
+import _ from 'lodash-es'
+import {
+  Route,
+  Switch
+} from 'react-router-dom'
 
 import {
-  AppstoreOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined,
-  MailOutlined,
 } from '@ant-design/icons';
+
+import { IRouters, routers } from '../routes/router'
+
+interface IMenuRender {
+  routers: IRouters[]
+}
 
 const { SubMenu } = Menu;
 const { Header, Footer, Sider, Content } = Layout;
 // css
 const SLayout = styled(Layout)`height: 100vh; overflow-y: scroll;`
 const SiderButton = styled(Button)`margin-bottom: 27px;`
-// react
-const App = () => {
-  const [collapsed, setCollapsed] = useState(false)
 
+
+// template
+
+const MenuRender: React.FC<IMenuRender> = ({ routers }) => {
+  const handleGoUrl = () => {
+  }
+  return (
+    _.isArray(routers) ? routers.map((router: IRouters) => (
+      _.isArray(router.children) ? (
+        <SubMenu key={router.id} icon={router.icon} title={router.title}>
+          <MenuRender routers={router.children} />
+        </SubMenu>
+      ) : (
+        <Menu.Item key={router.id} icon={router.icon} onClick={() => handleGoUrl()}>
+          {router.title}
+        </Menu.Item >
+      )
+    )) : null
+  )
+}
+
+const App = (props: any) => {
+  console.log(props);
+  const [collapsed, setCollapsed] = useState(false)
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
   };
+  const handleMenu = () => { }
 
   return (
     <SLayout>
@@ -32,44 +62,29 @@ const App = () => {
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
         </SiderButton>
         <Menu
+          onClick={handleMenu}
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
           mode="inline"
           theme="dark"
           inlineCollapsed={collapsed}
         >
-          <Menu.Item key="1" icon={<PieChartOutlined />}>
-            Option 1
-          </Menu.Item>
-          <Menu.Item key="2" icon={<DesktopOutlined />}>
-            Option 2
-          </Menu.Item>
-          <Menu.Item key="3" icon={<ContainerOutlined />}>
-            Option 3
-          </Menu.Item>
-          <SubMenu key="sub1" icon={<MailOutlined />} title="Navigation One">
-            <Menu.Item key="5">Option 5</Menu.Item>
-            <Menu.Item key="6">Option 6</Menu.Item>
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Navigation Two">
-            <Menu.Item key="9">Option 9</Menu.Item>
-            <Menu.Item key="10">Option 10</Menu.Item>
-            <SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="11">Option 11</Menu.Item>
-              <Menu.Item key="12">Option 12</Menu.Item>
-            </SubMenu>
-          </SubMenu>
+          <MenuRender routers={routers} />
         </Menu>
       </Sider>
       <Layout>
         <Header>Header</Header>
-        <Content>Content</Content>
+        <Content>
+          <Switch>
+            {routers.map(router => (
+              router.component && <Route exact path={router.path} component={router.component}></Route>
+            ))}
+          </Switch>
+        </Content>
         <Footer>Footer</Footer>
       </Layout>
-    </SLayout>
+    </SLayout >
   )
 }
 
-export default App
+export default withRouter(App)

@@ -1,3 +1,4 @@
+// 双色球
 import React from 'react'
 
 interface ISSQLiteProps {
@@ -5,7 +6,7 @@ interface ISSQLiteProps {
 }
 const SSQLite: React.FC<ISSQLiteProps> = () => {
   return (
-    <div></div>
+    <div>Hello world</div>
   )
 }
 
