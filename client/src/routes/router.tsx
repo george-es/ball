@@ -22,13 +22,13 @@ export const routers: IRouters[] = [{
   icon: <DribbbleOutlined />,
   component: SSQLite,
 }, {
-  title: 'ssqLite',
-  path: '/',
+  title: 'test',
+  path: '/test',
   id: '2',
   icon: <DribbbleOutlined />,
   children: [{
-    title: 'ssqLite',
-    path: '/2',
-    id: '3',
+    title: 'test-children',
+    path: '/test-children',
+    id: '2.1',
   }]
 }]

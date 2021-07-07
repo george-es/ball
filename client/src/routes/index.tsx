@@ -1,27 +1,19 @@
-import React, { Children } from 'react'
+import React from 'react'
 import {
   BrowserRouter,
-  Route,
-  Switch
 } from 'react-router-dom'
 
-import { IRouters, routers } from './router'
-
-interface IAppRouter {
+interface IRouter {
   children: any
 }
 
-const AppRouter: React.FC<IAppRouter> = ({ children }) => {
+const Router: React.FC<IRouter> = ({ children }) => {
   return (
+    // 路由最顶层
     <BrowserRouter>
       {children}
-      {/* <Switch>
-        {routers.map(router => (
-          router.component && <Route exact path={router.path} component={router.component}></Route>
-        ))}
-      </Switch> */}
     </BrowserRouter>
   )
 }
 
-export default AppRouter
+export default Router

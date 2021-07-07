@@ -1,24 +1,23 @@
 // 主应用入口
 import React, { useState } from 'react'
-import { withRouter } from 'react-router';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { Layout, Menu, Button } from 'antd';
 import styled from 'styled-components';
 import _ from 'lodash-es'
-import {
-  Route,
-  Switch
-} from 'react-router-dom'
-
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from '@ant-design/icons';
 
+
+import AppRouter from '../routes/appRouter'
 import { IRouters, routers } from '../routes/router'
 
-interface IMenuRender {
+
+interface IMenuRender extends RouteComponentProps {
   routers: IRouters[]
 }
+type TMenuRender = Pick<IMenuRender, 'history' | 'routers'>
 
 const { SubMenu } = Menu;
 const { Header, Footer, Sider, Content } = Layout;
@@ -29,26 +28,39 @@ const SiderButton = styled(Button)`margin-bottom: 27px;`
 
 // template
 
-const MenuRender: React.FC<IMenuRender> = ({ routers }) => {
-  const handleGoUrl = () => {
+const MenuRender: React.FC<TMenuRender> = ({ routers, history }) => {
+  const handleGoUrl = (path: string) => {
+    history.push(path)
   }
   return (
-    _.isArray(routers) ? routers.map((router: IRouters) => (
-      _.isArray(router.children) ? (
-        <SubMenu key={router.id} icon={router.icon} title={router.title}>
-          <MenuRender routers={router.children} />
-        </SubMenu>
-      ) : (
-        <Menu.Item key={router.id} icon={router.icon} onClick={() => handleGoUrl()}>
-          {router.title}
-        </Menu.Item >
-      )
-    )) : null
+    /*
+    这里如果没有包裹 <></> 就会报
+    不能将类型“({ routers, history }: PropsWithChildren<TMenuRender>) => Element[] | null”分配给类型“FC<TMenuRender>”。
+    不能将类型“Element[] | null”分配给类型“ReactElement<any, any> | null”。
+    类型“Element[]”缺少类型“ReactElement<any, any>”中的以下属性: type, props, key
+    也就是说返回值必须也保证 <></>在最外层
+     */
+    <> 
+      {
+        _.isArray(routers) ? routers.map((router: IRouters) => (
+          _.isArray(router.children) ? (
+            <SubMenu key={router.id} icon={router.icon} title={router.title}>
+              <MenuRender routers={router.children} history={ history }/>
+            </SubMenu>
+          ) : (
+            <Menu.Item key={router.id} icon={router.icon} onClick={() => handleGoUrl(router.path as string)}>
+              {router.title}
+            </Menu.Item >
+          )
+        )) : null
+      }
+    </>
   )
 }
 
-const App = (props: any) => {
-  console.log(props);
+interface IApp extends RouteComponentProps  {}
+
+const App: React.FC<IApp> = ({ history }) => {
   const [collapsed, setCollapsed] = useState(false)
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
@@ -69,17 +81,13 @@ const App = (props: any) => {
           theme="dark"
           inlineCollapsed={collapsed}
         >
-          <MenuRender routers={routers} />
+          <MenuRender routers={routers} history={history} />
         </Menu>
       </Sider>
       <Layout>
         <Header>Header</Header>
         <Content>
-          <Switch>
-            {routers.map(router => (
-              router.component && <Route exact path={router.path} component={router.component}></Route>
-            ))}
-          </Switch>
+          <AppRouter />
         </Content>
         <Footer>Footer</Footer>
       </Layout>
