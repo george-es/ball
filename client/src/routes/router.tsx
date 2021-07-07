@@ -4,10 +4,12 @@ import {
   DribbbleOutlined,
 } from '@ant-design/icons';
 import SSQLite from '../page/ssqLite';
+import Page404 from '../page/404'
 
 export interface IRouters {
   id: string | number
   title: string | number
+  isShow?: boolean
   path?: string
   icon?: React.ReactNode
   component?: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any> | any
@@ -21,6 +23,13 @@ export const routers: IRouters[] = [{
   id: '1',
   icon: <DribbbleOutlined />,
   component: SSQLite,
+}, {
+  title: '404',
+  path: '/404',
+  id: '1',
+  isShow: false,
+  icon: <DribbbleOutlined />,
+  component: Page404,
 }, {
   title: 'test',
   path: '/test',

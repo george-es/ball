@@ -1,14 +1,21 @@
 import React from 'react'
 import {
   Route,
-  Switch
+  Switch,
+  Redirect,
 } from 'react-router-dom'
 import { routers } from './router'
 const AppRouter: React.FC = () => (
   <Switch>
-    {routers.map(router => (
-      router.component && <Route key={router.id} path={router.path} component={router.component}></Route>
-    ))}
+    {routers.map(router => {
+      const { component, id, path, } = router
+      return (
+        component && <Route key={id} path={path} component={component}></Route>
+      )
+    })}
+    <Redirect
+      to='/404'
+    />
   </Switch>
 )
 

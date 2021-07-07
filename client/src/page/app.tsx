@@ -42,17 +42,21 @@ const MenuRender: React.FC<TMenuRender> = ({ routers, history }) => {
      */
     <> 
       {
-        _.isArray(routers) ? routers.map((router: IRouters) => (
-          _.isArray(router.children) ? (
-            <SubMenu key={router.id} icon={router.icon} title={router.title}>
-              <MenuRender routers={router.children} history={ history }/>
-            </SubMenu>
-          ) : (
-            <Menu.Item key={router.id} icon={router.icon} onClick={() => handleGoUrl(router.path as string)}>
-              {router.title}
-            </Menu.Item >
+        _.isArray(routers) ? routers.map((router: IRouters) => {
+          const { children,  id, icon, title, path, isShow = true} = router
+          return (
+            _.isArray(children) ? (
+              <SubMenu key={id} icon={icon} title={title}>
+                <MenuRender routers={children} history={history} />
+              </SubMenu>
+            ) : (
+              isShow && <Menu.Item key={id} icon={icon} onClick={() => handleGoUrl(path as string)}>
+                {router.title}
+              </Menu.Item >
+              
+            )
           )
-        )) : null
+        }) : null
       }
     </>
   )
