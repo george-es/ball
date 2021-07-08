@@ -3,7 +3,10 @@ import { RouteComponentProps } from 'react-router'
 import {
   DribbbleOutlined,
 } from '@ant-design/icons';
-import SSQLite from '../page/ssqLite';
+import asyncComponent from '../utils/asyncComponent.jsx';
+
+const ssqlite = asyncComponent(() => import('../page/ssqLite'));
+// import SSQLite from '../page/ssqLite';
 import Page404 from '../page/404'
 
 export interface IRouters {
@@ -22,7 +25,7 @@ export const routers: IRouters[] = [{
   path: '/ssq-lite',
   id: '1',
   icon: <DribbbleOutlined />,
-  component: SSQLite,
+  component: ssqlite,
 }, {
   title: '404',
   path: '/404',
