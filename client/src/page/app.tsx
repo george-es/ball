@@ -24,7 +24,9 @@ const { Header, Footer, Sider, Content } = Layout;
 // css
 const SLayout = styled(Layout)`height: 100vh; overflow-y: scroll;`
 const SiderButton = styled(Button)`margin-bottom: 27px;`
-
+const SSider = styled(Sider)`padding: 10px 0 0 10px;`
+const SRLayout = styled(Layout)``
+const SContent = styled(Content)`padding-left: 10px; border: 1px solid red;`
 
 // template
 
@@ -73,7 +75,7 @@ const App: React.FC<IApp> = ({ history }) => {
 
   return (
     <SLayout>
-      <Sider>
+      <SSider>
         <SiderButton type="primary" onClick={toggleCollapsed}>
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
         </SiderButton>
@@ -87,14 +89,14 @@ const App: React.FC<IApp> = ({ history }) => {
         >
           <MenuRender routers={routers} history={history} />
         </Menu>
-      </Sider>
-      <Layout>
-        <Header>Header</Header>
-        <Content>
+      </SSider>
+      <SRLayout>
+        {/* <SHeader >Header</SHeader> */}
+        <SContent>
           <AppRouter />
-        </Content>
+        </SContent>
         <Footer>Footer</Footer>
-      </Layout>
+      </SRLayout>
     </SLayout >
   )
 }

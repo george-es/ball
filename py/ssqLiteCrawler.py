@@ -26,16 +26,20 @@ def parseData(data):
     if data['message'] == '查询成功':
       result = data['result']
       for i in result:
-        print(i['red'], i['blue'])
+        print(i['code'], i['date'], i['red'], i['blue'])
   except:
     print('')
 
 def main():
   try:
-    start_url = 'http://www.cwl.gov.cn/cwl_admin/kjxx/findDrawNotice?name=ssq&issueCount=100'
+    
+    # start_url = 'http://www.cwl.gov.cn/cwl_admin/kjxx/findDrawNotice?name=ssq&issueCount=100'
+    start_url = 'http://www.cwl.gov.cn/cwl_admin/kjxx/findDrawNotice?name=ssq&issueCount=&issueStart=&issueEnd=&dayStart=2003-01-01&dayEnd=2021-07-09&pageNo='
     data = getData(start_url)
-    f = open('./ssq.txt', 'w')
-    f.write(str(data))
+    # print(data)
+    with open('./ssq.json', 'w', encoding="utf-8") as f:
+      # f.write(str(data))
+      f.write(json.dumps(data, ensure_ascii=False))
     parseData(data)
     print('')
   except:
