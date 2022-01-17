@@ -3,9 +3,9 @@ import { RouteComponentProps } from 'react-router'
 import {
   DribbbleOutlined,
 } from '@ant-design/icons';
-import asyncComponent from '../utils/asyncComponent.jsx';
+import asyncComponent from '../utils/asyncComponent';
 
-const ssqlite = asyncComponent(() => import('../page/ssqLite'));
+const dataAnalysis = asyncComponent(() => import('../page/ssqLite/dataAnalysis'));
 // import SSQLite from '../page/ssqLite';
 import Page404 from '../page/404'
 
@@ -13,19 +13,22 @@ export interface IRouters {
   id: string | number
   title: string | number
   isShow?: boolean
-  path?: string
+  path?: string // 有 children 情况下不用填这个
   icon?: React.ReactNode
   component?: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any> | any
   children?: IRouters[]
-  // group?: IRouters[]
 }
 
 export const routers: IRouters[] = [{
-  title: 'ssqLite',
-  path: '/ssq-lite',
+  title: '双色球',
   id: '1',
   icon: <DribbbleOutlined />,
-  component: ssqlite,
+  children: [{
+    title: '数据分析',
+    path: '/ssq-lite/data-analysis',
+    id: '1.1',
+    component: dataAnalysis,
+  }]
 }, {
   title: '404',
   path: '/404',
